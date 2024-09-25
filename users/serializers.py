@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import CustomUser
+from django.contrib.auth import authenticate
 
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
@@ -19,3 +20,23 @@ class UserSerializer(serializers.ModelSerializer):
             password=validated_data['password'],
         )
         return user
+
+
+class LoginSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    password = serializers.CharField(write_only=True)
+
+    def validate(self, data):
+        email = data.get("email")
+        password = data.get("password")
+
+        if email and password:
+            user = authenticate(username=email, password=password)
+            if user is None:
+                raise serializers.ValidationError("Invalid email or password")
+            if not user.is_active:
+                raise serializers.ValidationError("User account is disabled")
+        else:
+            raise serializers.ValidationError("Must include 'email' and 'password'")
+        data['user'] = user
+        return data
