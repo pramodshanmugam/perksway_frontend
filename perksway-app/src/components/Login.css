@@ -1,25 +1,132 @@
+body {
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+  background-color: #f6f8fa;
+}
+
 .login-container {
-    width: 400px;
-    margin: 100px auto;
-    text-align: center;
-  }
-  
-  input {
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-  }
-  
-  button {
-    padding: 10px;
-    width: 100%;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    cursor: pointer;
-  }
-  
-  .error {
-    color: red;
-  }
-  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f9fafb;
+}
+
+.login-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 85%; /* Adjust this for how wide the form+image container should be */
+  max-width: 1200px;
+  margin: auto;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.login-form-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 40px;
+  background-color: white;
+  width: 50%;
+}
+
+.login-form-section h2 {
+  font-size: 22px;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.login-form-section input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+/* Checkbox and label alignment */
+.form-options {
+  display: flex;
+  align-items: baseline;
+  margin-bottom: 1px;
+  gap: 15px; /* Adjust spacing between checkbox and label */
+}
+
+.form-options input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+}
+
+.form-options label {
+  font-size: 14px;
+  color: #333;
+  cursor: pointer; /* Make the label clickable */
+}
+
+/* Button alignment */
+.button-container {
+  display: flex;
+  gap: 10px; /* Space between Login and Register buttons */
+}
+
+button {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+button[type="submit"] {
+  background-color: #020d3a;
+  color: white;
+  width: 50%;
+}
+
+button[type="submit"]:hover {
+  background-color: #f5be35;
+}
+
+.register-button {
+  background-color: #f7e4d7;
+  color: #333;
+  margin-top: 10px;
+  width: 50%;
+}
+
+.register-button:hover {
+  background-color: #ffc83e;
+}
+
+.forgot-password {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.forgot-password a {
+  font-size: 14px;
+  color: #666;
+  text-decoration: none;
+}
+
+.login-image-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50%;
+  padding: 40px;
+  background-color: #f8ebe5;
+}
+
+.login-image-section img {
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+  margin: auto;
+}

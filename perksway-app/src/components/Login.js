@@ -7,7 +7,7 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();  // Changed from useHistory to useNavigate
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -33,7 +33,7 @@ const Login = () => {
       if (response.ok) {
         localStorage.setItem('access_token', data.access);
         localStorage.setItem('refresh_token', data.refresh);
-        navigate('/dashboard');  // Changed from history.push to navigate
+        navigate('/dashboard');
       } else {
         setError(data.detail || 'Login failed. Please try again.');
       }
@@ -46,25 +46,43 @@ const Login = () => {
 
   return (
     <div className="login-container">
-      <form onSubmit={handleLogin}>
-        <h2>Login</h2>
-        {error && <p className="error">{error}</p>}
-        <input
-          type="text"
-          placeholder="Username"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <button type="submit" disabled={loading}>
-          {loading ? 'Logging in...' : 'Login'}
-        </button>
-      </form>
+      <div className="login-wrapper">
+        <div className="login-form-section">
+          <form onSubmit={handleLogin}>
+            <h2>Please log in to your account</h2>
+            {error && <p className="error">{error}</p>}
+            <input
+              type="text"
+              placeholder="Username or E-mail"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <div className="form-options">
+              <input type="checkbox" id="keep-signed-in" />
+              <label htmlFor="keep-signed-in">Keep me signed in</label>
+            </div>
+            <button type="submit" disabled={loading}>
+              {loading ? 'Logging in...' : 'Login'}
+            </button>
+            <button type="button" className="register-button">
+              Register
+            </button>
+            <div className="forgot-password">
+              <a href="/forgot-password">Forgot your password?</a>
+            </div>
+            
+          </form>
+        </div>
+        <div className="login-image-section">
+          <img src="/Perksway-Design-01-1536x1338.png" alt="Perksway Illustration" />
+        </div>
+      </div>
     </div>
   );
 };
