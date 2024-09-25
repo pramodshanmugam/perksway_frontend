@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'rest_framework',
+     'corsheaders',
     'rest_framework_simplejwt',
     'users',
     'django.contrib.admin',
@@ -43,7 +44,9 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+     'corsheaders.middleware.CorsMiddleware',  # Add this at the top
     'django.middleware.security.SecurityMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -73,6 +76,32 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'perksway.wsgi.application'
 
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:3000',  # React app running on port 3000
+    'https://your-production-domain.com',  # Your production frontend domain
+]
+CORS_ALLOW_METHODS = [
+    'GET',
+    'POST',
+    'PUT',
+    'PATCH',
+    'DELETE',
+    'OPTIONS',
+]
+CORS_ALLOW_HEADERS = [
+    "accept",
+    "accept-encoding",
+    "authorization",
+    "content-type",
+    "dnt",
+    "origin",
+    "user-agent",
+    "x-csrftoken",
+    "x-requested-with",
+    "access-control-allow-methods",
+    "access-control-allow-headers",
+    "access-control-allow-origin",  # Include the required header here
+]
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
