@@ -7,7 +7,7 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // Hook for navigation
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -33,7 +33,7 @@ const Login = () => {
       if (response.ok) {
         localStorage.setItem('access_token', data.access);
         localStorage.setItem('refresh_token', data.refresh);
-        navigate('/dashboard');
+        navigate('/dashboard'); // Navigate to dashboard after successful login
       } else {
         setError(data.detail || 'Login failed. Please try again.');
       }
@@ -42,6 +42,10 @@ const Login = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleRegisterClick = () => {
+    navigate('/register'); // Navigate to the registration page
   };
 
   return (
@@ -70,13 +74,12 @@ const Login = () => {
             <button type="submit" disabled={loading}>
               {loading ? 'Logging in...' : 'Login'}
             </button>
-            <button type="button" className="register-button">
+            <button type="button" className="register-button" onClick={handleRegisterClick}>
               Register
             </button>
             <div className="forgot-password">
               <a href="/forgot-password">Forgot your password?</a>
             </div>
-            
           </form>
         </div>
         <div className="login-image-section">

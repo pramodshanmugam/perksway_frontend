@@ -1,0 +1,132 @@
+/* Global styling */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f2f5;
+}
+
+.register-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f2f5;
+}
+
+.form-image-container {
+    display: flex;
+    width: 70%; /* Wider to take up more space on the screen */
+    max-width: 1200px; /* Maximum width */
+    justify-content: space-between;
+    align-items: stretch;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-container {
+    width: 45%; /* Balanced form width */
+    padding: 40px; /* Increased padding for breathing room */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Center the form vertically */
+}
+
+h2 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    color: #2a2a2a;
+    text-align: left;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    padding: 14px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus {
+    outline: none;
+    border-color: #0056b3;
+}
+
+.role-selector {
+    display: flex;
+    justify-content: flex-start; /* Align radio buttons to the left */
+    gap: 15px; /* Add space between the radio buttons */
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+input[type="radio"] {
+    margin-right: 5px;
+}
+
+.buttons-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+button {
+    size: 50px;
+    padding: 12px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 48%;
+}
+
+button.register-button {
+    background-color: #0047ab;
+    color: white;
+}
+
+button.register-button:hover {
+    background-color: #07316d;
+}
+
+button.login-button {
+    background-color: #f8ebe5;
+    color: #333;
+}
+
+button.login-button:hover {
+    background-color: #f3dbc9;
+}
+
+.image-container {
+    width: 55%;
+    height: 100%;
+    background-color: #f8ebe5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 0 8px 8px 0;
+}
+
+.image-container img {
+    width: 80%; /* Reduced image width to fit nicely in the container */
+    height: auto;
+    object-fit: contain;
+}
+
+.error {
+    color: red;
+    font-size: 0.85rem;
+    margin-top: 10px;
+}
+
+button:disabled {
+    background-color: #ddd;
+    color: #999;
+}
