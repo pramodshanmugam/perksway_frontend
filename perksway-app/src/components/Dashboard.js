@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './Dashboard.css';
 import Navbar from './Navbar';
+import Footer from './Footer';
 
 const Dashboard = () => {
   const [classes, setClasses] = useState([]); // Classes data
@@ -114,6 +115,9 @@ const Dashboard = () => {
               </div>
             </div>
           </div>
+          <div className="footer">
+            <Footer />  {/* Render the Footer at the bottom */}
+            </div>
           </div>
   );
 };

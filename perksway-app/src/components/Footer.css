@@ -1,0 +1,81 @@
+/* Overall footer container */
+.footer {
+    background-color: #1b3044;  /* Matching background color */
+    color: white;
+    padding: 40px 0;  /* Space between sections */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+  }
+  
+  /* Content inside the footer */
+  .footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 80%;
+    margin-bottom: 20px;
+  }
+  
+  /* Left side: Logo and message */
+  .footer-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 400px;
+  }
+  
+  .footer-logo {
+    height: 100px;  /* Adjust to fit your logo */
+    margin-bottom: 20px;
+  }
+  
+  .footer-message {
+    font-size: 16px;
+    line-height: 1.5;
+    color: white;
+    margin-top: 10px;
+    text-align: center;
+  }
+  
+  /* Right side: Links */
+  .footer-right {
+    text-align: right;
+  }
+  
+  .footer-links {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .footer-links li {
+    margin-bottom: 10px;
+  }
+  
+  .footer-links a {
+    color: white;
+    font-size: 16px;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
+  .footer-links a:hover {
+    text-decoration: underline;
+  }
+  
+  /* Bottom section: Copyright */
+  .footer-bottom {
+    width: 100%;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 20px 0;
+    font-size: 14px;
+  }
+  
+  .footer-bottom p {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.7);
+  }
+  
