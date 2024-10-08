@@ -1,0 +1,187 @@
+/* Container for the dashboard */
+.dashboard-container {
+    width: 70%;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Class card layout and design */
+  .class-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+  }
+  
+  .class-header {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .class-icon-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .class-icon {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .class-info {
+    flex-grow: 1;
+    margin-left: 20px;
+  }
+  
+  .class-info h2 {
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  .class-code {
+    font-size: 14px;
+    color: gray;
+  }
+  
+  .class-meta {
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+    width: 30%;
+  }
+  
+  .admin-list {
+    font-size: 14px;
+    margin-right: 20px;
+  }
+  
+  .students-count {
+    font-size: 14px;
+  }
+  
+  /* Leave button */
+  .leave-button {
+    background-color: #104b05;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 125px;
+  }
+  
+  .leave-button:hover {
+    background-color: #b02a37;
+  }
+  
+  /* Tabs styling */
+  .tabs {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .tab-button {
+    padding: 10px 20px;
+    background: none;
+    border: none;
+    font-weight: bold;
+    color: #007bff;
+    border-bottom: 3px solid transparent;
+    cursor: pointer;
+  }
+  
+  .tab-button.active {
+    border-bottom: 3px solid #007bff;
+  }
+  
+  .settings-tab {
+    padding: 10px 20px;
+    background: none;
+    font-weight: bold;
+    color: gray;
+    cursor: pointer;
+  }
+  
+  /* Class content */
+  .class-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Search and sort bar */
+  .search-and-sort {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  
+  .search-and-sort select,
+  .search-and-sort input {
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+  }
+  
+  .search-and-sort input {
+    flex-grow: 1;
+    margin-left: 15px;
+  }
+  
+  /* Student list */
+  .students-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .student-card {
+    background-color: #1b3044;
+    color: white;
+    padding: 15px;
+    border-radius: 8px;
+    width: 150px;
+    text-align: center;
+  }
+  
+  /* Pagination */
+  .pagination {
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+  }
+  
+  .pagination button {
+    background-color: #062a52;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    margin: 0 10px;
+    cursor: pointer;
+  }
+  
+  .pagination button:hover {
+    background-color: #0056b3;
+  }
+  
+  .pagination span {
+    margin: 0 10px;
+    font-weight: bold;
+  }
+  

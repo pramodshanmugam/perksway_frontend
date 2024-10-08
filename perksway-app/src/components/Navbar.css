@@ -1,0 +1,67 @@
+/* Navbar container */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+    padding: 10px 30px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-family: 'Arial', sans-serif;
+  }
+  
+  /* Logo section */
+  .navbar-logo .logo {
+    height: 40px;
+  }
+  
+  /* Links section */
+  .navbar-links {
+    display: flex;
+    list-style: none;
+    gap: 30px;
+  }
+  
+  .navbar-links li {
+    font-size: 16px;
+    font-weight: bold;
+  }
+  
+  .navbar-links a {
+    color: #1b3044;  /* Perksway color */
+    text-decoration: none;
+  }
+  
+  .navbar-links a:hover {
+    color: #0056b3;  /* Hover color */
+  }
+  
+  /* Icons and user section */
+  .navbar-icons {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+  }
+  
+  .navbar-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 16px;
+    color: #1b3044;
+  }
+  
+  .navbar-icon {
+    font-size: 20px;
+    color: #1b3044;
+  }
+  
+  .navbar-item span {
+    font-size: 16px;
+    font-weight: bold;
+  }
+  
+  .navbar-item:hover {
+    color: #0056b3;
+    cursor: pointer;
+  }
+  
