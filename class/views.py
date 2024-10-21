@@ -50,3 +50,72 @@ def join_class(request, class_code):
         return Response({'message': 'Joined class successfully'})
     
     return Response({'error': 'Only students can join classes'}, status=403)
+
+
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.views import APIView
+from .models import Class, Group
+from .serializers import GroupSerializer
+from django.shortcuts import get_object_or_404
+
+class GroupDetailView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, class_id):
+        """Retrieve list of groups for the class where the user is present (either as a student or teacher)."""
+        # Get the class object
+        class_obj = get_object_or_404(Class, id=class_id)
+        
+        # Check if the user is the teacher of the class
+        if request.user == class_obj.teacher:
+            # If user is the teacher, return all groups of this class
+            groups = Group.objects.filter(class_ref=class_obj)
+        
+        # Check if the user is a student in the class
+        elif class_obj.students.filter(id=request.user.id).exists():
+            # If user is a student, return all groups of this class
+            groups = Group.objects.filter(class_ref=class_obj)
+        
+        else:
+            # If the user is neither a teacher nor a student in the class, deny access
+            return Response({"detail": "You are not a member of this class."}, status=status.HTTP_403_FORBIDDEN)
+        
+        # Serialize and return the group data
+        serializer = GroupSerializer(groups, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def put(self, request, group_id):
+        """Update group details (only by the creator)."""
+        group = self.get_group(group_id, request.user)
+        if not group:
+            return Response({"detail": "Permission denied. You are not the creator of this group."}, status=status.HTTP_403_FORBIDDEN)
+
+        serializer = GroupSerializer(group, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, group_id):
+        """Delete group (only by the creator)."""
+        group = self.get_group(group_id, request.user)
+        if not group:
+            return Response({"detail": "Permission denied. You are not the creator of this group."}, status=status.HTTP_403_FORBIDDEN)
+
+        group.delete()
+        return Response({"detail": "Group deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
+
+class AllGroupsInClassView(APIView):
+    permission_classes = [IsAuthenticated]  # Only authenticated users can access this API
+
+    def get(self, request, class_id):
+        """Retrieve all groups for a given class."""
+        class_obj = get_object_or_404(Class, id=class_id)
+
+        # Get all groups associated with this class
+        groups = Group.objects.filter(class_ref=class_obj)
+        serializer = GroupSerializer(groups, many=True)
+        
+        return Response(serializer.data, status=status.HTTP_200_OK)

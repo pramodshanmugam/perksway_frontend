@@ -1,6 +1,6 @@
 
 from rest_framework import serializers
-from .models import Class 
+from .models import Class, Group
 from users.models import CustomUser
 
 class UserSerializer(serializers.ModelSerializer):
@@ -19,3 +19,9 @@ class ClassSerializer(serializers.ModelSerializer):
         model = Class
         fields = ['id', 'name', 'description', 'class_code', 'teacher', 'students']
         read_only_fields = ['teacher', 'students']
+
+class GroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Group
+        fields = ['id', 'name', 'description', 'class_ref', 'creator', 'members', 'created_at', 'updated_at']
+        read_only_fields = ['creator', 'members']  # Make creator and members read-only
