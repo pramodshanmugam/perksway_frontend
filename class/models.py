@@ -19,9 +19,10 @@ class Group(models.Model):
     description = models.TextField(null=True, blank=True)
     class_ref = models.ForeignKey(Class, on_delete=models.CASCADE, related_name='groups')
     creator = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='created_groups')
-    members = models.ManyToManyField(CustomUser, related_name='joined_groups', blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    class_ref = models.ForeignKey(Class, on_delete=models.CASCADE, related_name="groups")
+    students = models.ManyToManyField(CustomUser, related_name="joined_groups")  # Add this line if it doesn't exist
 
     def __str__(self):
         return f"{self.name} - {self.class_ref.name}"
