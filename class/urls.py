@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import ClassListView, ClassCreateView, GroupDetailWithStudentsView, UserEnrolledClassView,  join_class, GroupDetailView, AllGroupsInClassView, GroupCreateView, join_group
+from .views import ApproveJoinRequestView, BulkGroupCreateView, ClassListView, ClassCreateView, GroupDetailWithStudentsView, UserEnrolledClassView,  join_class, GroupDetailView, AllGroupsInClassView, GroupCreateView, join_group
 
 urlpatterns = [
     path('', ClassListView.as_view(), name='class_list'),
@@ -11,5 +11,8 @@ urlpatterns = [
     path('group/join/<int:group_id>/', join_group, name='join_group'),
     path('group/details/<int:group_id>/', GroupDetailWithStudentsView.as_view(), name='group_detail_with_students'),
     path('enrolled/', UserEnrolledClassView.as_view(), name='user_enrolled_class'),
-
+    path('group/<int:group_id>/approve-request/', ApproveJoinRequestView.as_view(), name='approve-join-request'),
+    path('<int:class_id>/bulk-create-groups/', BulkGroupCreateView.as_view(), name='bulk-create-groups'),
 ]
+
+

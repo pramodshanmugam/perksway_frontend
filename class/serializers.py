@@ -30,3 +30,16 @@ class GroupDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Group
         fields = ['id', 'name', 'description', 'created_at', 'updated_at', 'students']
+
+
+class BulkGroupCreateSerializer(serializers.Serializer):
+    number_of_groups = serializers.IntegerField(min_value=1)
+    group_name_prefix = serializers.CharField(max_length=100)
+    max_students = serializers.IntegerField(min_value=1)
+    requires_approval = serializers.BooleanField(default=False)
+
+    def validate(self, data):
+        # Ensure a sensible number of groups is requested (optional validation)
+        if data['number_of_groups'] > 100:  # Arbitrary limit to prevent excessive group creation
+            raise serializers.ValidationError("Too many groups requested.")
+        return data
