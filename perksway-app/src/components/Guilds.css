@@ -1,274 +1,213 @@
 /* Container for the guilds page */
 .guilds-container {
-    width: 70%;
-    margin: 40px auto;
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  /* Group (Guild) card layout and design */
-  .group-card {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
-  }
-  
-  .group-card h4 {
-    font-size: 20px;
-    font-weight: bold;
-  }
-  
-  .group-card p {
-    color: gray;
-  }
-  
-  /* Leave button styling (for consistency) */
-  .leave-button {
-    background-color: #104b05;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 4px;
-    cursor: pointer;
-    width: 125px;
-  }
-  
-  .leave-button:hover {
-    background-color: #b02a37;
-  }
-  
-  /* Join group button */
-  .join-group-button {
-    background-color: #104b05;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 4px;
-    cursor: pointer;
-    width: 125px;
-  }
-  
-  .join-group-button:hover {
-    background-color: #71be0b;
-  }
-  
-  /* Tabs styling */
-  .tabs {
-    display: flex;
-    justify-content: space-around;
-    margin-bottom: 20px;
-    border-bottom: 1px solid #ddd;
-  }
-  
-  .tab-button {
-    padding: 10px 20px;
-    background: none;
-    border: none;
-    font-weight: bold;
-    color: #007bff;
-    border-bottom: 3px solid transparent;
-    cursor: pointer;
-  }
-  
-  .tab-button.active {
-    border-bottom: 3px solid #007bff;
-  }
-  
-  /* Content styling for Guilds page */
-  .guilds-content {
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  /* Search and sort bar */
-  .search-and-sort {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
-  }
-  
-  .search-and-sort select,
-  .search-and-sort input {
-    padding: 10px;
-    border-radius: 4px;
-    border: 1px solid #ddd;
-    font-size: 16px;
-  }
-  
-  .search-and-sort input {
-    flex-grow: 1;
-    margin-left: 15px;
-  }
-  
-  /* Group list */
-  .groups-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-  
-  .group-card {
-    background-color: #1b3044;
-    color: white;
-    padding: 15px;
-    border-radius: 8px;
-    width: 150px;
-    text-align: center;
-  }
-  
-  /* Pagination */
-  .pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px;
-  }
-  
-  .pagination button {
-    background-color: #062a52;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 4px;
-    margin: 0 10px;
-    cursor: pointer;
-  }
-  
-  .pagination button:hover {
-    background-color: #0056b3;
-  }
-  
-  .pagination span {
-    margin: 0 10px;
-    font-weight: bold;
-  }
-  
-  /* Popup styling for group creation */
-  .create-group-popup {
-    background-color: white;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    width: 400px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
-  
-  .create-group-popup label {
-    display: block;
-    margin-bottom: 10px;
-  }
-  
-  .create-group-input {
-    padding: 10px;
-    width: 100%;
-    box-sizing: border-box;
-    margin-bottom: 15px;
-    border-radius: 4px;
-    border: 1px solid #ddd;
-  }
-  
-  .submit-group-button, .cancel-button {
-    padding: 10px 20px;
-    background-color: #043504;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-right: 10px;
-  }
-  
-  .submit-group-button:hover, .cancel-button:hover {
-    background-color: #0f3802;
-  }
-  
-
-  /* Guilds page container */
-.guilds-container {
-    width: 70%;
-    margin: 40px auto;
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: 70%;
+  margin: 40px auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 /* Group card layout */
 .group-card {
-    background-color: #1b3044;
-    color: white;
-    padding: 20px;
-    border-radius: 8px;
-    margin: 10px;
-    width: 150px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: space-between;
-    text-align: left;
+  background-color: #1b3044;
+  color: white;
+  padding: 20px;
+  border-radius: 8px;
+  margin: 10px;
+  width: 150px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  text-align: left;
 }
 
 /* Group name styling */
 .group-card h4 {
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 10px;
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
 }
 
 /* Group description styling */
 .group-card p {
-    font-size: 14px;
-    color: #ddd;
-    margin-bottom: 10px;
+  font-size: 14px;
+  color: #ddd;
+  margin-bottom: 10px;
 }
 
 /* Button styling */
-.create-group-button, .join-group-button {
-    padding: 8px 12px;
-    background-color: #104b05;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
-    margin-top: 10px;
+.create-group-button,
+.join-group-button,
+.leave-button {
+  padding: 8px 12px;
+  background-color: #104b05;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-top: 10px;
+  transition: background-color 0.3s;
 }
 
-.create-group-button:hover, .join-group-button:hover {
-    background-color: #71be0b;
+.create-group-button:hover,
+.join-group-button:hover,
+.leave-button:hover {
+  background-color: #71be0b;
 }
 
-.groups-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-}
-
-.create-group-popup {
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 10;
-}
-
+/* Error message styling */
 .error-message {
-    color: red;
-    margin-bottom: 20px;
+  color: red;
+  margin-bottom: 20px;
+}
+
+/* Tabs styling */
+.tabs {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #ddd;
+}
+
+.tab-button {
+  padding: 10px 20px;
+  background: none;
+  border: none;
+  font-weight: bold;
+  color: #007bff;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+}
+
+.tab-button.active {
+  border-bottom: 3px solid #007bff;
+}
+
+/* Content styling for Guilds page */
+.guilds-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Search and sort bar */
+.search-and-sort {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.search-and-sort select,
+.search-and-sort input {
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  font-size: 16px;
+}
+
+.search-and-sort input {
+  flex-grow: 1;
+  margin-left: 15px;
+}
+
+/* Group list */
+.groups-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.pagination button {
+  background-color: #062a52;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  margin: 0 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.pagination button:hover {
+  background-color: #0056b3;
+}
+
+.pagination span {
+  margin: 0 10px;
+  font-weight: bold;
+}
+
+/* Popup styling for group creation */
+.create-group-popup {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  width: 400px;
+  border: 1px solid #ddd;
+}
+
+.create-group-popup label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.create-group-input {
+  padding: 10px;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 15px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+}
+
+.submit-group-button,
+.cancel-button {
+  padding: 10px 20px;
+  background-color: #043504;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-right: 10px;
+  transition: background-color 0.3s;
+}
+
+.submit-group-button:hover,
+.cancel-button:hover {
+  background-color: #0f3802;
+}
+
+/* Close button for the group members section */
+.group-members button {
+  margin-top: 15px;
+  padding: 8px 12px;
+  font-size: 14px;
+  color: white;
+  background-color: #e74c3c;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.group-members button:hover {
+  background-color: #c0392b;
 }

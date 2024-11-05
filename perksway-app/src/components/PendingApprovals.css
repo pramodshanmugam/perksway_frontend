@@ -1,0 +1,84 @@
+/* Container styling for pending approvals */
+.pending-approvals {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+  }
+  
+  .pending-approvals h3 {
+    margin-top: 0;
+    font-size: 22px;
+    color: #333;
+  }
+  
+  /* Styling for error messages */
+  .error-message {
+    color: #e74c3c;
+    margin-bottom: 15px;
+    font-size: 14px;
+  }
+  
+  /* List styling for pending requests */
+  .pending-approvals ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .pending-approvals li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: white;
+    border-radius: 4px;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
+  }
+  
+  /* Username display */
+  .pending-approvals li span {
+    font-size: 16px;
+    color: #333;
+  }
+  
+  /* Approve and Decline buttons styling */
+  .pending-approvals button {
+    padding: 8px 12px;
+    font-size: 14px;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-left: 10px;
+  }
+  
+  /* Approve button styling */
+  .pending-approvals button:first-child {
+    background-color: #27ae60; /* Green for approval */
+  }
+  
+  .pending-approvals button:first-child:hover {
+    background-color: #219150;
+  }
+  
+  /* Decline button styling */
+  .pending-approvals button:last-child {
+    background-color: #e74c3c; /* Red for decline */
+  }
+  
+  .pending-approvals button:last-child:hover {
+    background-color: #c0392b;
+  }
+  
+  /* No pending requests message */
+  .pending-approvals p {
+    color: #7f8c8d;
+    font-size: 16px;
+    text-align: center;
+    margin: 20px 0;
+  }
+  

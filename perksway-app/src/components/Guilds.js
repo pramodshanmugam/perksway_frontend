@@ -1,18 +1,27 @@
+// Guilds.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import './Guilds.css';
 import Navbar from './Navbar';
 import Footer from './Footer';
+import PendingApprovals from './PendingApprovals';
 
 const Guilds = () => {
   const [groups, setGroups] = useState([]);
   const [role, setRole] = useState(null); // User role: student or teacher
   const [showCreateGroupPopup, setShowCreateGroupPopup] = useState(false);
-  const [groupName, setGroupName] = useState('');
-  const [groupDescription, setGroupDescription] = useState('');
+  const [groupNamePrefix, setGroupNamePrefix] = useState('');
+  const [numberOfGroups, setNumberOfGroups] = useState(1);
+  const [maxStudents, setMaxStudents] = useState('');
+  const [requiresApproval, setRequiresApproval] = useState(false);
   const [error, setError] = useState(null);
-  const navigate = useNavigate(); // Hook to navigate to other pages
+  const [showPendingApprovals, setShowPendingApprovals] = useState(false);
+  const [selectedGroupId, setSelectedGroupId] = useState(null);
+  const [selectedGroupMembers, setSelectedGroupMembers] = useState([]);
+  const [selectedGroupName, setSelectedGroupName] = useState('');
+  const [showGroupMembers, setShowGroupMembers] = useState(false);
+  const navigate = useNavigate();
   const { classId } = useParams(); // Retrieve classId from URL
 
   useEffect(() => {
@@ -47,7 +56,7 @@ const Guilds = () => {
         setError('Failed to load groups.');
       });
   };
-  
+
   const handleJoinGroup = (groupId) => {
     const token = localStorage.getItem('access_token');
     axios.post(`http://localhost:8000/api/v1/classes/group/join/${groupId}/`, {}, {
@@ -63,34 +72,52 @@ const Guilds = () => {
       });
   };
 
-  const handleCreateGroup = () => {
+  const handleBulkCreateGroups = () => {
     const token = localStorage.getItem('access_token');
-    const groupData = {
-      name: groupName,
-      description: groupDescription,
-      class_ref: classId, // Use the actual class ID from URL params
+    const bulkData = {
+      number_of_groups: numberOfGroups,
+      group_name_prefix: groupNamePrefix,
+      max_students: maxStudents,
+      requires_approval: requiresApproval
     };
 
-    axios.post('http://localhost:8000/api/v1/classes/group/create-group/', groupData, {
+    axios.post(`http://localhost:8000/api/v1/classes/${classId}/bulk-create-groups/`, bulkData, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then(response => {
-        const createdGroup = response.data;
-        setGroups([...groups, createdGroup]);
+        alert(`${numberOfGroups} groups created successfully.`);
         setShowCreateGroupPopup(false);
-        alert('Group created successfully');
-        setGroupName('');
-        setGroupDescription('');
+        fetchGroups(token, classId); // Refresh the group list
+        setGroupNamePrefix('');
+        setNumberOfGroups(1);
+        setMaxStudents('');
+        setRequiresApproval(false);
       })
       .catch(error => {
-        console.error('Error creating group:', error);
-        alert('Failed to create group.');
+        console.error('Error creating groups:', error);
+        alert('Failed to create groups.');
       });
   };
 
-  const handleGroupClick = (groupId) => {
-    // Navigate to the GroupDetails page for the clicked group
-    navigate(`/groups/${groupId}`);
+  const handleShowPendingApprovals = (groupId) => {
+    setSelectedGroupId(groupId);
+    setShowPendingApprovals(true);
+  };
+
+  const fetchGroupMembers = (groupId, groupName) => {
+    const token = localStorage.getItem('access_token');
+    axios.get(`http://localhost:8000/api/v1/classes/group/details/${groupId}/`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then(response => {
+        setSelectedGroupMembers(response.data.students);
+        setSelectedGroupName(groupName);
+        setShowGroupMembers(true);
+      })
+      .catch(error => {
+        console.error('Error fetching group members:', error);
+        setError('Failed to load group members.');
+      });
   };
 
   return (
@@ -99,16 +126,18 @@ const Guilds = () => {
       <div className="main-content guilds-container">
         {error && <div className="error-message">{error}</div>}
         <h3>Groups (Guilds)</h3>
-        
+
         {role === 'teacher' && (
-          <button onClick={() => setShowCreateGroupPopup(true)} className="create-group-button">Create Group</button>
+          <button onClick={() => setShowCreateGroupPopup(true)} className="create-group-button">Bulk Create Groups</button>
         )}
-        
+
         {groups.length > 0 ? (
           <div className="groups-list">
             {groups.map((group) => (
-              <div key={group.id} className="group-card" onClick={() => handleGroupClick(group.id)}>
-                <h4>{group.name}</h4>
+              <div key={group.id} className="group-card">
+                <h4 onClick={() => fetchGroupMembers(group.id, group.name)} className="group-name clickable">
+                  {group.name}
+                </h4>
                 <p>{group.description}</p>
                 {role === 'student' && (
                   <button onClick={(e) => {
@@ -116,30 +145,75 @@ const Guilds = () => {
                     handleJoinGroup(group.id);
                   }} className="join-group-button">Join Group</button>
                 )}
+                {role === 'teacher' && (
+                  <button onClick={() => handleShowPendingApprovals(group.id)} className="pending-approvals-button">
+                    Approvals
+                  </button>
+                )}
               </div>
             ))}
           </div>
         ) : (
           <div>No groups found</div>
         )}
-  
+
         {showCreateGroupPopup && (
           <div className="create-group-popup">
-            <h3>Create a New Group</h3>
+            <h3>Bulk Create Groups</h3>
             <input
               type="text"
-              placeholder="Group Name"
-              value={groupName}
-              onChange={(e) => setGroupName(e.target.value)}
+              placeholder="Group Name Prefix"
+              value={groupNamePrefix}
+              onChange={(e) => setGroupNamePrefix(e.target.value)}
             />
             <input
-              type="text"
-              placeholder="Group Description"
-              value={groupDescription}
-              onChange={(e) => setGroupDescription(e.target.value)}
+              type="number"
+              placeholder="Number of Groups"
+              value={numberOfGroups}
+              onChange={(e) => setNumberOfGroups(e.target.value)}
+              min="1"
             />
-            <button onClick={handleCreateGroup} className="submit-group-button">Create Group</button>
+            <input
+              type="number"
+              placeholder="Max Students per Group"
+              value={maxStudents}
+              onChange={(e) => setMaxStudents(e.target.value)}
+              min="1"
+            />
+            <label>
+              <input
+                type="checkbox"
+                checked={requiresApproval}
+                onChange={(e) => setRequiresApproval(e.target.checked)}
+              />
+              Requires Approval
+            </label>
+            <button onClick={handleBulkCreateGroups} className="submit-group-button">Create Groups</button>
             <button onClick={() => setShowCreateGroupPopup(false)} className="cancel-button">Cancel</button>
+          </div>
+        )}
+
+        {/* Render PendingApprovals component when triggered */}
+        {showPendingApprovals && selectedGroupId && (
+          <PendingApprovals groupId={selectedGroupId} />
+        )}
+
+        {/* Display Group Members */}
+        {showGroupMembers && (
+          <div className="group-members">
+            <h3>Members of {selectedGroupName}</h3>
+            <ul>
+              {selectedGroupMembers.length > 0 ? (
+                selectedGroupMembers.map((member) => (
+                  <li key={member.id}>
+                    {member.first_name} {member.last_name} ({member.email})
+                  </li>
+                ))
+              ) : (
+                <p>No members found in this group.</p>
+              )}
+            </ul>
+            <button onClick={() => setShowGroupMembers(false)}>Close</button>
           </div>
         )}
       </div>
