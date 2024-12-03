@@ -50,25 +50,40 @@ const Dashboard = () => {
     axios.get('http://localhost:8000/api/v1/classes/', {
       headers: { Authorization: `Bearer ${token}` },
     })
-      .then(response => {
-        setClasses(response.data);
-        const joinedClass = response.data.find(cls => cls.class_code === classCode);
-        if (joinedClass) {
-          setSelectedClass(joinedClass);
-          setStudents(joinedClass.students);
-        } else if (response.data.length > 0) {
-          setSelectedClass(response.data[0]);
-          setStudents(response.data[0].students);
+    .then(response => {
+      const fetchedClasses = response.data;
+      setClasses(fetchedClasses);
+      
+      // Determine the class to select: first from the list or based on a stored preference
+      let selected = fetchedClasses[0] || null;
+      
+      // Example: Select a class based on previously selected class id from local storage
+      const storedClassId = localStorage.getItem('class_id');
+      if (storedClassId) {
+        const storedClass = fetchedClasses.find(cls => cls.id.toString() === storedClassId);
+        if (storedClass) {
+          selected = storedClass;
         }
-        setLoading(false);
-      })
-      .catch(error => {
-        console.error('Error fetching classes:', error);
-        setError('Failed to load classes.');
-        setLoading(false);
-      });
+      }
+  
+      if (selected) {
+        setSelectedClass(selected);
+        setStudents(selected.students);
+        // Update the class_id in local storage to reflect the current selection
+        localStorage.setItem('class_id', selected.id);
+      } else {
+        setSelectedClass(null); // No classes available
+      }
+  
+      setLoading(false);
+    })
+    .catch(error => {
+      console.error('Error fetching classes:', error);
+      setError('Failed to load classes.');
+      setLoading(false);
+    });
   };
-
+  
   const handleLeaveClass = () => {
     const token = localStorage.getItem('access_token');
 
