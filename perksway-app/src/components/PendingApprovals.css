@@ -46,15 +46,19 @@
   
   /* Approve and Decline buttons styling */
   .pending-approvals button {
-    padding: 8px 12px;
+    padding: -1px 12px;
     font-size: 14px;
+    background-color: #04381a;
     color: white;
     border: none;
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s;
     margin-left: 10px;
+    width: 90px;
+    height: 40px;
   }
+  .pending-approvals 
   
   /* Approve button styling */
   .pending-approvals button:first-child {
@@ -82,3 +86,18 @@
     margin: 20px 0;
   }
   
+  .pending-approvals .select-all-button {
+    padding: 8px 12px;
+    font-size: 14px;
+    color: white;
+    background-color: #3498db; /* Blue for select actions */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-right: 10px; /* Space before the approve all and decline all buttons */
+}
+
+.pending-approvals .select-all-button:hover {
+    background-color: #2980b9; /* Darker blue on hover */
+}

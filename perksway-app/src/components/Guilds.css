@@ -211,3 +211,44 @@
 .group-members button:hover {
   background-color: #c0392b;
 }
+.badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background-color: red;
+  color: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 12px;
+}
+
+.group-card {
+  position: relative; /* Ensure the position context for the badge */
+  margin: 5px;
+  width: 150px;
+  height: 100px;
+  background-color: #333;
+  color: white;
+  border-radius: 5px;
+  padding: 10px;
+  display: inline-block;
+}
+
+.group-name {
+  cursor: pointer;
+}
+
+.approvals-button {
+  position: relative;
+  padding: 0px 37px;
+  background-color: #0b4204;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+}

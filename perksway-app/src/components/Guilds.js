@@ -1,4 +1,3 @@
-// Guilds.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -9,7 +8,7 @@ import PendingApprovals from './PendingApprovals';
 
 const Guilds = () => {
   const [groups, setGroups] = useState([]);
-  const [role, setRole] = useState(null); // User role: student or teacher
+  const [role, setRole] = useState(null);
   const [showCreateGroupPopup, setShowCreateGroupPopup] = useState(false);
   const [groupNamePrefix, setGroupNamePrefix] = useState('');
   const [numberOfGroups, setNumberOfGroups] = useState(1);
@@ -21,8 +20,9 @@ const Guilds = () => {
   const [selectedGroupMembers, setSelectedGroupMembers] = useState([]);
   const [selectedGroupName, setSelectedGroupName] = useState('');
   const [showGroupMembers, setShowGroupMembers] = useState(false);
+  const [pendingApprovalsCount, setPendingApprovalsCount] = useState(0); // State for managing pending approvals count
   const navigate = useNavigate();
-  const { classId } = useParams(); // Retrieve classId from URL
+  const { classId } = useParams();
 
   useEffect(() => {
     const token = localStorage.getItem('access_token');
@@ -36,7 +36,7 @@ const Guilds = () => {
       .then(response => {
         const user = response.data;
         setRole(user.role);
-        fetchGroups(token, classId); // Fetch groups for the selected class
+        fetchGroups(token, classId);
       })
       .catch(error => {
         console.error('Error fetching user details:', error);
@@ -49,7 +49,21 @@ const Guilds = () => {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then(response => {
-        setGroups(response.data);
+        const groupsWithPendingCounts = response.data.map(group => {
+          return axios.get(`http://localhost:8000/api/v1/classes/group/${group.id}/approve-request/?count=true`, {
+            headers: { Authorization: `Bearer ${token}` },
+          })
+          .then(countResponse => ({
+            ...group,
+            pendingApprovalsCount: countResponse.data.count
+          }))
+          .catch(error => {
+            console.error('Error fetching pending approvals count:', error);
+            return { ...group, pendingApprovalsCount: 0 }; // Default to 0 in case of error
+          });
+        });
+
+        Promise.all(groupsWithPendingCounts).then(groups => setGroups(groups));
       })
       .catch(error => {
         console.error('Error fetching groups:', error);
@@ -100,8 +114,19 @@ const Guilds = () => {
   };
 
   const handleShowPendingApprovals = (groupId) => {
-    setSelectedGroupId(groupId);
-    setShowPendingApprovals(true);
+    const token = localStorage.getItem('access_token');
+    axios.get(`http://localhost:8000/api/v1/classes/group/${groupId}/approve-request/?count=true`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then(response => {
+        setPendingApprovalsCount(response.data.count);
+        setSelectedGroupId(groupId);
+        setShowPendingApprovals(true);
+      })
+      .catch(error => {
+        console.error('Error fetching pending approvals', error);
+        // Handle error appropriately
+      });
   };
 
   const fetchGroupMembers = (groupId, groupName) => {
@@ -126,7 +151,6 @@ const Guilds = () => {
       <div className="main-content guilds-container">
         {error && <div className="error-message">{error}</div>}
         <h3>Groups (Guilds)</h3>
-
         {role === 'teacher' && (
           <button onClick={() => setShowCreateGroupPopup(true)} className="create-group-button">Bulk Create Groups</button>
         )}
@@ -146,9 +170,14 @@ const Guilds = () => {
                   }} className="join-group-button">Join Group</button>
                 )}
                 {role === 'teacher' && (
-                  <button onClick={() => handleShowPendingApprovals(group.id)} className="pending-approvals-button">
+                  <div className="approvals-button" onClick={() => handleShowPendingApprovals(group.id)}>
                     Approvals
-                  </button>
+                    {group.pendingApprovalsCount > 0 && (
+                      <div className="badge">
+                        {group.pendingApprovalsCount}
+                      </div>
+                    )}
+                  </div>
                 )}
               </div>
             ))}
@@ -188,8 +217,10 @@ const Guilds = () => {
               />
               Requires Approval
             </label>
-            <button onClick={handleBulkCreateGroups} className="submit-group-button">Create Groups</button>
-            <button onClick={() => setShowCreateGroupPopup(false)} className="cancel-button">Cancel</button>
+            <div>
+              <button onClick={handleBulkCreateGroups} className="submit-group-button">Create Groups</button>
+              <button onClick={() => setShowCreateGroupPopup(false)} className="cancel-button">Cancel</button>
+            </div>
           </div>
         )}
 
