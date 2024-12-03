@@ -209,6 +209,7 @@ from rest_framework.response import Response
 from .models import Group
 from .serializers import GroupSerializer
 
+
 class ApproveJoinRequestView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -218,10 +219,20 @@ class ApproveJoinRequestView(APIView):
         # Ensure the request is made by the teacher
         if request.user != group.class_ref.teacher:
             return Response({"error": "Not authorized"}, status=403)
-        
+
+        # Check if only the count is needed
+        only_count = request.query_params.get('count', False)
+
         # List pending approvals
         pending_users = group.pending_approvals.all()
-        return Response({"pending_approvals": [{"id": user.id, "username": user.username} for user in pending_users]})
+        
+        # If only the count is needed
+        if only_count:
+            return Response({"count": pending_users.count()})
+
+        # Return details if count is not specifically requested
+        user_details = [{"id": user.id, "username": user.username} for user in pending_users]
+        return Response({"pending_approvals": user_details, "count": len(user_details)})
 
     def post(self, request, group_id):
         group = get_object_or_404(Group, id=group_id)
@@ -279,3 +290,28 @@ class BulkGroupCreateView(APIView):
             )
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class BulkApprovalView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, group_id):
+        group = get_object_or_404(Group, id=group_id)
+        user_ids = request.data.get("user_ids", [])  # List of user IDs
+        action = request.data.get("action")  # 'approve' or 'decline'
+        
+        if request.user != group.class_ref.teacher:
+            return Response({"error": "Not authorized"}, status=403)
+        
+        students = CustomUser.objects.filter(id__in=user_ids)
+        
+        if action == "approve":
+            group.students.add(*students)
+            group.pending_approvals.remove(*students)
+            message = "Students approved to join."
+        elif action == "decline":
+            group.pending_approvals.remove(*students)
+            message = "Student requests declined."
+        else:
+            return Response({"error": "Invalid action"}, status=400)
+
+        return Response({"message": message})
