@@ -1,31 +1,26 @@
+// src/components/Navbar.js
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { FaWallet, FaUser, FaSignOutAlt } from 'react-icons/fa';
+import axios from 'axios';
 import './Navbar.css';
-import { FaWallet, FaUser } from 'react-icons/fa';
-import axios from 'axios';  // Import axios for HTTP requests
 
 const Navbar = () => {
   const [walletBalance, setWalletBalance] = useState('Loading...');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchWalletBalance = async () => {
       const token = localStorage.getItem('access_token');
-      const classId = localStorage.getItem('class_id');  // Retrieve classId from local storage
-
-      console.log('Fetching wallet balance with token:', token, 'and class ID:', classId);
+      const classId = localStorage.getItem('class_id');
 
       if (token && classId) {
         try {
           const response = await axios.get(`http://localhost:8000/api/v1/classes/wallets/${classId}/balance/`, {
             headers: { Authorization: `Bearer ${token}` }
           });
-          console.log('Wallet balance fetched:', response.data);
-
-          if (response.data && typeof response.data.balance === 'number') {
-            setWalletBalance(`฿${response.data.balance.toFixed(2)}`);
-          } else {
-            console.error('Invalid balance data:', response.data);
-            setWalletBalance('Invalid balance data');
-          }
+          setWalletBalance(`฿${response.data.balance.toFixed(2)}`);
+          localStorage.setItem('wallet_balance', response.data.balance.toFixed(2));
         } catch (error) {
           console.error('Failed to fetch wallet balance:', error);
           setWalletBalance('Failed to fetch');
@@ -36,9 +31,13 @@ const Navbar = () => {
     };
 
     fetchWalletBalance();
+  }, []);
 
-    // Re-fetch when token or classId changes
-  }, [localStorage.getItem('access_token'), localStorage.getItem('class_id')]);
+  const handleLogout = () => {
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('class_id');
+    navigate('/login');
+  };
 
   return (
     <nav className="navbar">
@@ -60,6 +59,9 @@ const Navbar = () => {
         </div>
         <div className="navbar-item">
           <FaUser className="navbar-icon" />
+        </div>
+        <div className="navbar-item" onClick={handleLogout}>
+          <FaSignOutAlt className="navbar-icon" title="Logout" />
         </div>
       </div>
     </nav>

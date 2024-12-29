@@ -1,0 +1,203 @@
+/* General styling for the ItemList container */
+.item-list {
+    margin: 20px;
+    padding: 20px;
+    text-align: center;
+    font-family: Arial, sans-serif;
+}
+
+/* Title for the Byte Bazaar */
+.item-list h2 {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #003366;
+}
+
+/* Container for all the items */
+.items {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Makes the grid responsive */
+    gap: 20px;
+    margin-top: 20px;
+}
+
+/* Styling for individual item cards */
+.item-card {
+    border: 1px solid #ddd;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Hover effect for the item cards */
+.item-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Item image styling */
+.item-image {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    object-fit: cover;
+}
+
+/* Item title */
+.item-card h3 {
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+/* Description of the item */
+.item-card p {
+    font-size: 1rem;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+/* Price of the item */
+.item-card .price {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #003366;
+    margin-bottom: 15px;
+}
+
+/* Button to buy item */
+.item-card button {
+    padding: 10px 20px;
+    background-color: #003366;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+/* Button hover effect */
+.item-card button:hover {
+    background-color: #0055cc;
+}
+
+/* Modal background */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);  /* Semi-transparent background */
+    display: none; /* Initially hidden */
+    justify-content: center;
+    align-items: center;
+    z-index: 9999; /* Ensure the modal is on top */
+}
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    width: 400px; /* Adjust width as needed */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+.modal.show {
+    display: flex;
+}
+
+/* Buttons */
+button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+h3 {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.approval-details {
+    margin-bottom: 20px;
+}
+
+.approval-details p {
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.approval-actions {
+    display: flex;
+    justify-content: space-evenly;
+    margin-bottom: 20px;
+}
+
+
+button:hover {
+    opacity: 0.8;
+}
+/* Styling for approval and decline buttons */
+.approve-btn {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.decline-btn {
+    background-color: #f44336;
+    color: white;
+}
+
+.cancel-btn {
+    background-color: #777;
+    color: white;
+    width: 80%;
+    padding: 12px;
+    font-size: 18px;
+    border-radius: 5px;
+    cursor: pointer;
+    display: block;
+    margin-top: 10px;
+}
+
+button:hover {
+    opacity: 0.8;
+}
+/* Styling for the approve all button */
+.approve-all-btn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: block;
+    margin: 10px auto;
+    font-size: 16px;
+}
+
+.approve-all-btn:hover {
+    opacity: 0.8;
+}
+
+.request-card {
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.request-card button {
+    margin-top: 10px;
+}
+
+.pending-requests {
+    margin-top: 20px;
+}

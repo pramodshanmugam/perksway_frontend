@@ -6,6 +6,9 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 
 const Dashboard = () => {
+  const [className, setClassName] = useState('');
+  const [classDescription, setClassDescription] = useState('');
+  const [classCodeInput, setClassCodeInput] = useState('');
   const [classes, setClasses] = useState([]);
   const [selectedClass, setSelectedClass] = useState(null);
   const [students, setStudents] = useState([]);
@@ -19,10 +22,9 @@ const Dashboard = () => {
   const [joinError, setJoinError] = useState(null);
   const [role, setRole] = useState(null);
   const [showCreateClassPopup, setShowCreateClassPopup] = useState(false);
-
-  const [className, setClassName] = useState('');
-  const [classDescription, setClassDescription] = useState('');
-  const [classCodeInput, setClassCodeInput] = useState('');
+  const [showWalletModal, setShowWalletModal] = useState(false);
+  const [selectedStudentEmail, setSelectedStudentEmail] = useState('');
+  const [walletAmount, setWalletAmount] = useState('');
 
   const studentsPerPage = 10;
   const navigate = useNavigate();
@@ -30,13 +32,11 @@ const Dashboard = () => {
   useEffect(() => {
     const token = localStorage.getItem('access_token');
     setLoading(true);
-
     axios.get('http://localhost:8000/api/v1/users/user/', {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then(response => {
-        const user = response.data;
-        setRole(user.role);
+        setRole(response.data.role);
         fetchClasses(token);
       })
       .catch(error => {
@@ -53,26 +53,13 @@ const Dashboard = () => {
     .then(response => {
       const fetchedClasses = response.data;
       setClasses(fetchedClasses);
-      
-      // Determine the class to select: first from the list or based on a stored preference
-      let selected = fetchedClasses[0] || null;
-      
-      // Example: Select a class based on previously selected class id from local storage
-      const storedClassId = localStorage.getItem('class_id');
-      if (storedClassId) {
-        const storedClass = fetchedClasses.find(cls => cls.id.toString() === storedClassId);
-        if (storedClass) {
-          selected = storedClass;
-        }
-      }
+
+      let selected = fetchedClasses.find(cls => cls.id.toString() === localStorage.getItem('class_id')) || fetchedClasses[0];
   
       if (selected) {
         setSelectedClass(selected);
         setStudents(selected.students);
-        // Update the class_id in local storage to reflect the current selection
-        localStorage.setItem('class_id', selected.id);
-      } else {
-        setSelectedClass(null); // No classes available
+        localStorage.setItem('class_id', selected.id.toString());
       }
   
       setLoading(false);
@@ -86,39 +73,38 @@ const Dashboard = () => {
   
   const handleLeaveClass = () => {
     const token = localStorage.getItem('access_token');
-
     axios.post(`http://localhost:8000/api/v1/classes/leave/${selectedClass.class_code}/`, {}, {
       headers: { Authorization: `Bearer ${token}` },
     })
-      .then(() => {
-        alert('Successfully left the class');
-        setSelectedClass(null);
-      })
-      .catch(error => {
-        console.error('Error leaving class:', error);
-        setError('Failed to leave class.');
-      });
+    .then(() => {
+      alert('Successfully left the class');
+      setSelectedClass(null);
+      setStudents([]);
+    })
+    .catch(error => {
+      console.error('Error leaving class:', error);
+      setError('Failed to leave class.');
+    });
   };
 
   const handleJoinClass = () => {
     const token = localStorage.getItem('access_token');
     setJoinError(null);
-
     axios.post(`http://localhost:8000/api/v1/classes/join/${classCode}/`, {}, {
       headers: { Authorization: `Bearer ${token}` },
     })
-      .then(response => {
-        const newClass = response.data;
-        setClasses([...classes, newClass]);
-        setSelectedClass(newClass);
-        setStudents(newClass.students);
-        setClassCode('');
-        alert('Successfully joined the class');
-      })
-      .catch(error => {
-        console.error('Error joining class:', error);
-        setJoinError('Failed to join class. Please check the class code.');
-      });
+    .then(response => {
+      const newClass = response.data;
+      setClasses(prevClasses => [...prevClasses, newClass]);
+      setSelectedClass(newClass);
+      setStudents(newClass.students);
+      setClassCode('');
+      alert('Successfully joined the class');
+    })
+    .catch(error => {
+      console.error('Error joining class:', error);
+      setJoinError('Failed to join class. Please check the class code.');
+    });
   };
 
   const handleCreateClass = () => {
@@ -132,20 +118,43 @@ const Dashboard = () => {
     axios.post('http://localhost:8000/api/v1/classes/create/', classData, {
       headers: { Authorization: `Bearer ${token}` },
     })
+    .then(response => {
+      const createdClass = response.data;
+      setClasses(prevClasses => [...prevClasses, createdClass]);
+      setSelectedClass(createdClass);
+      setShowCreateClassPopup(false);
+      setClassName('');
+      setClassDescription('');
+      setClassCodeInput('');
+      alert('Class created successfully');
+    })
+    .catch(error => {
+      console.error('Error creating class:', error);
+      alert('Failed to create class.');
+    });
+  };
+
+  const updateWalletBalance = () => {
+    const token = localStorage.getItem('access_token');
+    if (selectedClass && selectedClass.id && selectedStudentEmail && walletAmount) {
+      axios.put(`http://localhost:8000/api/v1/classes/wallets/${selectedClass.id}/`, {
+        email: selectedStudentEmail,
+        amount: walletAmount
+      }, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
       .then(response => {
-        const createdClass = response.data;
-        setClasses([...classes, createdClass]);
-        setSelectedClass(createdClass);
-        setShowCreateClassPopup(false);
-        alert('Class created successfully');
-        setClassName('');
-        setClassDescription('');
-        setClassCodeInput('');
+        alert('Wallet balance updated successfully');
+        setShowWalletModal(false);
+        setWalletAmount('');
       })
       .catch(error => {
-        console.error('Error creating class:', error);
-        alert('Failed to create class.');
+        console.error('Error updating wallet balance:', error);
+        alert('Failed to update wallet balance.');
       });
+    } else {
+      alert('Invalid data for update');
+    }
   };
 
   const filteredStudents = students
@@ -186,9 +195,7 @@ const Dashboard = () => {
                     <h2>{selectedClass.name} <span className="class-code">{selectedClass.class_code}</span></h2>
                     <div className="class-meta">
                       <span className="admin-list">
-                        <strong>Admin:</strong> {selectedClass.admins?.map(admin => (
-                          <span key={admin.id}>{admin.name}</span>
-                        ))}
+                        <strong>Admin:</strong> {selectedClass.teacher}
                       </span>
                       <span className="students-count"><strong>Students:</strong> {selectedClass.students.length}</span>
                     </div>
@@ -282,11 +289,30 @@ const Dashboard = () => {
 
               <div className="students-list">
                 {filteredStudents.length > 0 ? filteredStudents.map((student, index) => (
-                  <div key={index} className="student-card">
+                  <div key={index} className="student-card" onClick={() => {
+                    setSelectedStudentEmail(student);
+                    setShowWalletModal(true);
+                  }}>
                     <div className="student-email">{student}</div>
                   </div>
                 )) : <div>No students found</div>}
               </div>
+
+              {showWalletModal && (
+                <div className="modal">
+                  <div className="modal-content">
+                    <span className="close" onClick={() => setShowWalletModal(false)}>&times;</span>
+                    <h2>Update Wallet Balance for {selectedStudentEmail}</h2>
+                    <input
+                      type="number"
+                      placeholder="Enter amount"
+                      value={walletAmount}
+                      onChange={(e) => setWalletAmount(e.target.value)}
+                    />
+                    <button onClick={updateWalletBalance}>Update Balance</button>
+                  </div>
+                </div>
+              )}
 
               <div className="pagination">
                 <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>Previous</button>
