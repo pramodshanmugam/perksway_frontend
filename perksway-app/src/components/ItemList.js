@@ -15,6 +15,7 @@ const ItemList = () => {
     const [selectedPurchaseRequest, setSelectedPurchaseRequest] = useState(null);
     const [showPendingRequests, setShowPendingRequests] = useState(false);
     const [selectedRequests, setSelectedRequests] = useState([]);
+    const [selectAll, setSelectAll] = useState(false);
 
     useEffect(() => {
         const token = localStorage.getItem('access_token');
@@ -118,7 +119,7 @@ const ItemList = () => {
 
     const handleApprovePurchase = (requestId, action) => {
         const token = localStorage.getItem('access_token');
-        axios.post(`http://localhost:8000/api/v1/purchase-request/${requestId}/action/`, { action }, {
+        axios.post(`http://localhost:8000/api/v1/classes/purchase-request/${requestId}/action/`, { action }, {
             headers: { Authorization: `Bearer ${token}` }
         })
         .then(response => {
@@ -163,6 +164,15 @@ const ItemList = () => {
         }
     };
 
+    const toggleSelectAll = () => {
+        setSelectAll(!selectAll);
+        if (!selectAll) {
+            setSelectedRequests(pendingRequests.map(req => req.id)); // Select all requests
+        } else {
+            setSelectedRequests([]); // Deselect all requests
+        }
+    };
+
     return (
         <div className="item-list">
             <Navbar />
@@ -188,6 +198,9 @@ const ItemList = () => {
                     <div className="modal show">
                         <div className="modal-content">
                             <h3>Pending Purchase Requests</h3>
+                            <button className="select-all-button" onClick={toggleSelectAll}>
+                                {selectAll ? 'Deselect All' : 'Select All'}
+                            </button>
                             {pendingRequests.map(request => (
                                 <div key={request.id} className="request-card">
                                     <input 

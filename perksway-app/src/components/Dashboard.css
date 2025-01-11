@@ -259,7 +259,7 @@
   background-color: #0f3802;
 }
 /* Modal backdrop styling */
-.modal-backdrop {
+.modal-wallet-backdrop {
   position: fixed;
   top: 0;
   left: 0;
@@ -272,7 +272,7 @@
   z-index: 1050; /* High z-index */
 }
 
-.modal-content {
+.modal-wallet-content {
   background: white;
   padding: 20px;
   border-radius: 8px;
@@ -282,7 +282,7 @@
   animation: fadeIn 0.3s;
 }
 
-.modal-content .close {
+.modal-wallet-content .close {
   position: absolute;
   color: #013a0b;
   top: 10px;
@@ -292,7 +292,7 @@
   cursor: pointer;
 }
 
-.modal-input {
+.modal-wallet-content {
   width: 100%;
   padding: 10px;
   margin: 10px 0;
@@ -301,7 +301,7 @@
   font-size: 1rem;
 }
 
-.modal-button {
+.modal-wallet-button {
   width: 100%;
   padding: 10px;
   background-color: #007bff;
@@ -364,4 +364,80 @@
 
 .student-card:hover {
   background: #104b05;
+}
+/* Modal styling */
+.modal-wallet {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Transparent background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999; /* Ensure it's on top of other elements */
+  transition: opacity 0.3s ease;
+}
+
+.modal-content-wallet {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 400px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.modal-content-wallet h2 {
+  margin-bottom: 15px;
+  font-size: 1.2em;
+  color: #333;
+}
+
+.modal-content-wallet input {
+  width: 80%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1em;
+}
+
+.modal-content-wallet button {
+  background-color: #4CAF50; /* Green color */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin: 10px 0;
+  border-radius: 5px;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.modal-content-wallet button:hover {
+  background-color: #45a049;
+}
+
+.modal-content-wallet .close {
+  font-size: 1.5em;
+  font-weight: bold;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+  color: #aaa;
+  transition: color 0.3s ease;
+}
+
+.modal-content-wallet .close:hover {
+  color: #333;
+}
+
+/* Overlay background */
+.modal-wallet .modal-content-wallet {
+  transition: transform 0.3s ease-in-out;
 }

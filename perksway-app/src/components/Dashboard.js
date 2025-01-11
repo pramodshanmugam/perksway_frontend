@@ -299,8 +299,8 @@ const Dashboard = () => {
               </div>
 
               {showWalletModal && (
-                <div className="modal">
-                  <div className="modal-content">
+                <div className="modal-wallet">
+                  <div className="modal-content-wallet">
                     <span className="close" onClick={() => setShowWalletModal(false)}>&times;</span>
                     <h2>Update Wallet Balance for {selectedStudentEmail}</h2>
                     <input
