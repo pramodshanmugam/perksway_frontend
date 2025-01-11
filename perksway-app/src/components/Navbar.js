@@ -16,7 +16,7 @@ const Navbar = () => {
 
       if (token && classId) {
         try {
-          const response = await axios.get(`http://localhost:8000/api/v1/classes/wallets/${classId}/balance/`, {
+          const response = await axios.get(`http://167.88.45.167:8000/api/v1/classes/wallets/${classId}/balance/`, {
             headers: { Authorization: `Bearer ${token}` }
           });
           setWalletBalance(`฿${response.data.balance.toFixed(2)}`);

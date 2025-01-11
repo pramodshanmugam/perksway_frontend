@@ -13,7 +13,7 @@ const PendingApprovals = ({ groupId }) => {
   }, []);
 
   const fetchPendingRequests = (token) => {
-    axios.get(`http://localhost:8000/api/v1/classes/group/${groupId}/approve-request/`, {
+    axios.get(`http://167.88.45.167:8000/api/v1/classes/group/${groupId}/approve-request/`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then(response => {
@@ -29,7 +29,7 @@ const PendingApprovals = ({ groupId }) => {
 
   const handleApproval = (userId, action) => {
     const token = localStorage.getItem('access_token');
-    axios.post(`http://localhost:8000/api/v1/classes/group/${groupId}/approve-request/`, {
+    axios.post(`http://167.88.45.167:8000/api/v1/classes/group/${groupId}/approve-request/`, {
       user_id: userId,
       action: action // 'approve' or 'decline'
     }, {
@@ -47,7 +47,7 @@ const PendingApprovals = ({ groupId }) => {
 
   const handleBulkApproval = (action) => {
     const token = localStorage.getItem('access_token');
-    axios.post(`http://localhost:8000/api/v1/classes/group/${groupId}/bulk-approve/`, {
+    axios.post(`http://167.88.45.167:8000/api/v1/classes/group/${groupId}/bulk-approve/`, {
       user_ids: selectedUserIds,
       action: action // 'approve' or 'decline'
     }, {

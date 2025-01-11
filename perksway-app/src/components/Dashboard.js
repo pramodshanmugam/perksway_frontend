@@ -32,7 +32,7 @@ const Dashboard = () => {
   useEffect(() => {
     const token = localStorage.getItem('access_token');
     setLoading(true);
-    axios.get('http://localhost:8000/api/v1/users/user/', {
+    axios.get('http://167.88.45.167:8000/api/v1/users/user/', {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then(response => {
@@ -47,7 +47,7 @@ const Dashboard = () => {
   }, []);
 
   const fetchClasses = (token) => {
-    axios.get('http://localhost:8000/api/v1/classes/', {
+    axios.get('http://167.88.45.167:8000/api/v1/classes/', {
       headers: { Authorization: `Bearer ${token}` },
     })
     .then(response => {
@@ -73,7 +73,7 @@ const Dashboard = () => {
   
   const handleLeaveClass = () => {
     const token = localStorage.getItem('access_token');
-    axios.post(`http://localhost:8000/api/v1/classes/leave/${selectedClass.class_code}/`, {}, {
+    axios.post(`http://167.88.45.167:8000/api/v1/classes/leave/${selectedClass.class_code}/`, {}, {
       headers: { Authorization: `Bearer ${token}` },
     })
     .then(() => {
@@ -90,7 +90,7 @@ const Dashboard = () => {
   const handleJoinClass = () => {
     const token = localStorage.getItem('access_token');
     setJoinError(null);
-    axios.post(`http://localhost:8000/api/v1/classes/join/${classCode}/`, {}, {
+    axios.post(`http://167.88.45.167:8000/api/v1/classes/join/${classCode}/`, {}, {
       headers: { Authorization: `Bearer ${token}` },
     })
     .then(response => {
@@ -115,7 +115,7 @@ const Dashboard = () => {
       class_code: classCodeInput,
     };
 
-    axios.post('http://localhost:8000/api/v1/classes/create/', classData, {
+    axios.post('http://167.88.45.167:8000/api/v1/classes/create/', classData, {
       headers: { Authorization: `Bearer ${token}` },
     })
     .then(response => {
@@ -137,7 +137,7 @@ const Dashboard = () => {
   const updateWalletBalance = () => {
     const token = localStorage.getItem('access_token');
     if (selectedClass && selectedClass.id && selectedStudentEmail && walletAmount) {
-      axios.put(`http://localhost:8000/api/v1/classes/wallets/${selectedClass.id}/`, {
+      axios.put(`http://167.88.45.167:8000/api/v1/classes/wallets/${selectedClass.id}/`, {
         email: selectedStudentEmail,
         amount: walletAmount
       }, {

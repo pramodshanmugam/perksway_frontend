@@ -16,7 +16,7 @@ const GroupDetails = () => {
   }, []);
 
   const fetchGroupStudents = (token) => {
-    axios.get(`http://localhost:8000/api/v1/classes/group/details/${groupId}/`, {
+    axios.get(`http://167.88.45.167:8000/api/v1/classes/group/details/${groupId}/`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then(response => {

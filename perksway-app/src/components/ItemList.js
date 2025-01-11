@@ -25,7 +25,7 @@ const ItemList = () => {
     }, []);
 
     const fetchUserRole = (token) => {
-        axios.get('http://localhost:8000/api/v1/users/user/', {
+        axios.get('http://167.88.45.167:8000/api/v1/users/user/', {
             headers: { Authorization: `Bearer ${token}` },
         })
         .then(response => {
@@ -47,7 +47,7 @@ const ItemList = () => {
             return;
         }
 
-        axios.get(`http://localhost:8000/api/v1/classes/${classId}/items/`, {
+        axios.get(`http://167.88.45.167:8000/api/v1/classes/${classId}/items/`, {
             headers: { Authorization: `Bearer ${token}` }
         })
         .then(response => {
@@ -59,7 +59,7 @@ const ItemList = () => {
         });
 
         if (role === 'teacher') {
-            axios.get(`http://localhost:8000/api/v1/classes/${classId}/purchase-approval/`, {
+            axios.get(`http://167.88.45.167:8000/api/v1/classes/${classId}/purchase-approval/`, {
                 headers: { Authorization: `Bearer ${token}` }
             })
             .then(response => {
@@ -75,7 +75,7 @@ const ItemList = () => {
         const walletBalance = parseFloat(localStorage.getItem('wallet_balance') || 0);
         if (walletBalance >= price) {
             const classId = localStorage.getItem('class_id');
-            axios.post(`http://localhost:8000/api/v1/classes/${classId}/purchase-item/${itemId}/`, {}, {
+            axios.post(`http://167.88.45.167:8000/api/v1/classes/${classId}/purchase-item/${itemId}/`, {}, {
                 headers: { Authorization: `Bearer ${localStorage.getItem('access_token')}` }
             })
             .then(response => {
@@ -99,7 +99,7 @@ const ItemList = () => {
         }
 
         if (newItem.name && newItem.description && newItem.price) {
-            axios.post(`http://localhost:8000/api/v1/classes/${classId}/items/`, newItem, {
+            axios.post(`http://167.88.45.167:8000/api/v1/classes/${classId}/items/`, newItem, {
                 headers: { Authorization: `Bearer ${token}` }
             })
             .then(response => {
@@ -119,7 +119,7 @@ const ItemList = () => {
 
     const handleApprovePurchase = (requestId, action) => {
         const token = localStorage.getItem('access_token');
-        axios.post(`http://localhost:8000/api/v1/classes/purchase-request/${requestId}/action/`, { action }, {
+        axios.post(`http://167.88.45.167:8000/api/v1/classes/purchase-request/${requestId}/action/`, { action }, {
             headers: { Authorization: `Bearer ${token}` }
         })
         .then(response => {
@@ -143,7 +143,7 @@ const ItemList = () => {
         const token = localStorage.getItem('access_token');
         const classId = localStorage.getItem('class_id');
 
-        axios.get(`http://localhost:8000/api/v1/classes/${classId}/purchase-approval/`, {
+        axios.get(`http://167.88.45.167:8000/api/v1/classes/${classId}/purchase-approval/`, {
             headers: { Authorization: `Bearer ${token}` }
         })
         .then(response => {

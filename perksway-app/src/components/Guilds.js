@@ -30,7 +30,7 @@ const Guilds = () => {
   }, []);
 
   const fetchUserRole = (token) => {
-    axios.get('http://localhost:8000/api/v1/users/user/', {
+    axios.get('http://167.88.45.167:8000/api/v1/users/user/', {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then(response => {
@@ -45,12 +45,12 @@ const Guilds = () => {
   };
 
   const fetchGroups = (token, classId) => {
-    axios.get(`http://localhost:8000/api/v1/classes/group/all-groups/${classId}/`, {
+    axios.get(`http://167.88.45.167:8000/api/v1/classes/group/all-groups/${classId}/`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then(response => {
         const groupsWithPendingCounts = response.data.map(group => {
-          return axios.get(`http://localhost:8000/api/v1/classes/group/${group.id}/approve-request/?count=true`, {
+          return axios.get(`http://167.88.45.167:8000/api/v1/classes/group/${group.id}/approve-request/?count=true`, {
             headers: { Authorization: `Bearer ${token}` },
           })
           .then(countResponse => ({
@@ -73,7 +73,7 @@ const Guilds = () => {
 
   const handleJoinGroup = (groupId) => {
     const token = localStorage.getItem('access_token');
-    axios.post(`http://localhost:8000/api/v1/classes/group/join/${groupId}/`, {}, {
+    axios.post(`http://167.88.45.167:8000/api/v1/classes/group/join/${groupId}/`, {}, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then(() => {
@@ -95,7 +95,7 @@ const Guilds = () => {
       requires_approval: requiresApproval
     };
 
-    axios.post(`http://localhost:8000/api/v1/classes/${classId}/bulk-create-groups/`, bulkData, {
+    axios.post(`http://167.88.45.167:8000/api/v1/classes/${classId}/bulk-create-groups/`, bulkData, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then(response => {
@@ -115,7 +115,7 @@ const Guilds = () => {
 
   const handleShowPendingApprovals = (groupId) => {
     const token = localStorage.getItem('access_token');
-    axios.get(`http://localhost:8000/api/v1/classes/group/${groupId}/approve-request/?count=true`, {
+    axios.get(`http://167.88.45.167:8000/api/v1/classes/group/${groupId}/approve-request/?count=true`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then(response => {
@@ -131,7 +131,7 @@ const Guilds = () => {
 
   const fetchGroupMembers = (groupId, groupName) => {
     const token = localStorage.getItem('access_token');
-    axios.get(`http://localhost:8000/api/v1/classes/group/details/${groupId}/`, {
+    axios.get(`http://167.88.45.167:8000/api/v1/classes/group/details/${groupId}/`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then(response => {
