@@ -20,7 +20,14 @@ const Guilds = () => {
   const [selectedGroupMembers, setSelectedGroupMembers] = useState([]);
   const [selectedGroupName, setSelectedGroupName] = useState('');
   const [showGroupMembers, setShowGroupMembers] = useState(false);
-  const [pendingApprovalsCount, setPendingApprovalsCount] = useState(0); // State for managing pending approvals count
+  const [pendingApprovalsCount, setPendingApprovalsCount] = useState(0);
+
+  // Edit Group States
+  const [showEditPopup, setShowEditPopup] = useState(false);
+  const [editGroupName, setEditGroupName] = useState('');
+  const [editMaxStudents, setEditMaxStudents] = useState('');
+  const [editRequiresApproval, setEditRequiresApproval] = useState(false);
+
   const navigate = useNavigate();
   const { classId } = useParams();
 
@@ -125,7 +132,6 @@ const Guilds = () => {
       })
       .catch(error => {
         console.error('Error fetching pending approvals', error);
-        // Handle error appropriately
       });
   };
 
@@ -142,6 +148,36 @@ const Guilds = () => {
       .catch(error => {
         console.error('Error fetching group members:', error);
         setError('Failed to load group members.');
+      });
+  };
+
+  const handleShowEditPopup = (group) => {
+    setEditGroupName(group.name);
+    setEditMaxStudents(group.max_students);
+    setEditRequiresApproval(group.requires_approval);
+    setSelectedGroupId(group.id); // Reuse selectedGroupId for editing
+    setShowEditPopup(true);
+  };
+
+  const handleEditGroupSubmit = () => {
+    const token = localStorage.getItem('access_token');
+    const updatedData = {
+      name: editGroupName,
+      max_students: editMaxStudents,
+      requires_approval: editRequiresApproval,
+    };
+
+    axios.put(`http://167.88.45.167:8000/api/v1/classes/group/${selectedGroupId}/`, updatedData, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then(() => {
+        alert('Group updated successfully');
+        setShowEditPopup(false);
+        fetchGroups(token, classId); // Refresh the groups list
+      })
+      .catch(error => {
+        console.error('Error updating group:', error);
+        setError('Failed to update group.');
       });
   };
 
@@ -164,20 +200,36 @@ const Guilds = () => {
                 </h4>
                 <p>{group.description}</p>
                 {role === 'student' && (
-                  <button onClick={(e) => {
-                    e.stopPropagation();
-                    handleJoinGroup(group.id);
-                  }} className="join-group-button">Join Group</button>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleJoinGroup(group.id);
+                    }}
+                    className="join-group-button"
+                  >
+                    Join Group
+                  </button>
                 )}
                 {role === 'teacher' && (
-                  <div className="approvals-button" onClick={() => handleShowPendingApprovals(group.id)}>
-                    Approvals
-                    {group.pendingApprovalsCount > 0 && (
-                      <div className="badge">
-                        {group.pendingApprovalsCount}
-                      </div>
-                    )}
-                  </div>
+                  <>
+                    <div className="approvals-button" onClick={() => handleShowPendingApprovals(group.id)}>
+                      Approvals
+                      {group.pendingApprovalsCount > 0 && (
+                        <div className="badge">
+                          {group.pendingApprovalsCount}
+                        </div>
+                      )}
+                    </div>
+                    <div
+                      className="edit-icon"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleShowEditPopup(group);
+                      }}
+                    >
+                      ✏️
+                    </div>
+                  </>
                 )}
               </div>
             ))}
@@ -224,12 +276,46 @@ const Guilds = () => {
           </div>
         )}
 
-        {/* Render PendingApprovals component when triggered */}
+        {showEditPopup && (
+          <div className="edit-popup">
+            <div className="edit-popup-content">
+              <h3>Edit Group</h3>
+              <label>
+                Group Name:
+                <input
+                  type="text"
+                  value={editGroupName}
+                  onChange={(e) => setEditGroupName(e.target.value)}
+                />
+              </label>
+              <label>
+                Max Students:
+                <input
+                  type="number"
+                  value={editMaxStudents}
+                  onChange={(e) => setEditMaxStudents(e.target.value)}
+                />
+              </label>
+              <label>
+                Requires Approval:
+                <input
+                  type="checkbox"
+                  checked={editRequiresApproval}
+                  onChange={(e) => setEditRequiresApproval(e.target.checked)}
+                />
+              </label>
+              <div className="edit-popup-actions">
+                <button onClick={handleEditGroupSubmit} className="save-button">Save</button>
+                <button onClick={() => setShowEditPopup(false)} className="cancel-button">Cancel</button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {showPendingApprovals && selectedGroupId && (
           <PendingApprovals groupId={selectedGroupId} />
         )}
 
-        {/* Display Group Members */}
         {showGroupMembers && (
           <div className="group-members">
             <h3>Members of {selectedGroupName}</h3>

@@ -10,6 +10,9 @@ const ItemList = () => {
     const [role, setRole] = useState(null);
     const [newItem, setNewItem] = useState({ name: '', description: '', price: '' });
     const [showModal, setShowModal] = useState(false);
+    const [showEditModal, setShowEditModal] = useState(false); // Edit modal state
+    const [editItem, setEditItem] = useState({ name: '', description: '', price: '' }); // Item being edited
+    const [editItemId, setEditItemId] = useState(null); // ID of item being edited
     const [pendingRequests, setPendingRequests] = useState([]);
     const [showApprovalModal, setShowApprovalModal] = useState(false);
     const [selectedPurchaseRequest, setSelectedPurchaseRequest] = useState(null);
@@ -117,6 +120,35 @@ const ItemList = () => {
         }
     };
 
+    const handleEditItem = (item) => {
+        setEditItem({ name: item.name, description: item.description, price: item.price });
+        setEditItemId(item.id);
+        setShowEditModal(true);
+    };
+
+    const handleSaveEditItem = () => {
+        const token = localStorage.getItem('access_token');
+        const classId = localStorage.getItem('class_id');
+
+        if (!classId) {
+            alert('Class ID is not available.');
+            return;
+        }
+
+        axios.put(`http://167.88.45.167:8000/api/v1/classes/${classId}/items/${editItemId}/`, editItem, {
+            headers: { Authorization: `Bearer ${token}` },
+        })
+        .then(response => {
+            alert('Item updated successfully');
+            setItems(items.map(item => item.id === editItemId ? response.data : item));
+            setShowEditModal(false);
+        })
+        .catch(error => {
+            alert('Failed to update item');
+            console.error(error);
+        });
+    };
+
     const handleApprovePurchase = (requestId, action) => {
         const token = localStorage.getItem('access_token');
         axios.post(`http://167.88.45.167:8000/api/v1/classes/purchase-request/${requestId}/action/`, { action }, {
@@ -133,46 +165,6 @@ const ItemList = () => {
         });
     };
 
-    const handleApproveAll = () => {
-        selectedRequests.forEach(requestId => {
-            handleApprovePurchase(requestId, 'approve');
-        });
-    };
-
-    const togglePendingRequests = () => {
-        const token = localStorage.getItem('access_token');
-        const classId = localStorage.getItem('class_id');
-
-        axios.get(`http://167.88.45.167:8000/api/v1/classes/${classId}/purchase-approval/`, {
-            headers: { Authorization: `Bearer ${token}` }
-        })
-        .then(response => {
-            setPendingRequests(response.data);
-            setShowPendingRequests(!showPendingRequests);
-        })
-        .catch(error => {
-            console.error('Error fetching purchase requests:', error);
-        });
-    };
-
-    const handleRequestSelect = (requestId) => {
-        const isSelected = selectedRequests.includes(requestId);
-        if (isSelected) {
-            setSelectedRequests(selectedRequests.filter(id => id !== requestId));
-        } else {
-            setSelectedRequests([...selectedRequests, requestId]);
-        }
-    };
-
-    const toggleSelectAll = () => {
-        setSelectAll(!selectAll);
-        if (!selectAll) {
-            setSelectedRequests(pendingRequests.map(req => req.id)); // Select all requests
-        } else {
-            setSelectedRequests([]); // Deselect all requests
-        }
-    };
-
     return (
         <div className="item-list">
             <Navbar />
@@ -187,53 +179,26 @@ const ItemList = () => {
                     </button>
                 )}
 
-                {role === 'teacher' && (
-                    <button className="show-pending-button" onClick={togglePendingRequests}>
-                        Show Pending Purchase Requests
-                    </button>
-                )}
-
-                {/* Modal for Pending Purchase Requests */}
-                {role === 'teacher' && showPendingRequests && pendingRequests.length > 0 && (
-                    <div className="modal show">
-                        <div className="modal-content">
-                            <h3>Pending Purchase Requests</h3>
-                            <button className="select-all-button" onClick={toggleSelectAll}>
-                                {selectAll ? 'Deselect All' : 'Select All'}
-                            </button>
-                            {pendingRequests.map(request => (
-                                <div key={request.id} className="request-card">
-                                    <input 
-                                        type="checkbox" 
-                                        checked={selectedRequests.includes(request.id)} 
-                                        onChange={() => handleRequestSelect(request.id)} 
-                                    />
-                                    <p>Student: {request.student.username}</p>
-                                    <p>Item: {request.item.name}</p>
-                                    <p>Amount: ฿{request.amount}</p>
-                                    <button onClick={() => { setSelectedPurchaseRequest(request); setShowApprovalModal(true); }}>
-                                        Approve/Decline
-                                    </button>
-                                </div>
-                            ))}
-                            <button className="approve-all-btn" onClick={handleApproveAll}>
-                                Approve All
-                            </button>
-                            <button onClick={() => setShowPendingRequests(false)}>Close</button>
-                        </div>
-                    </div>
-                )}
-
                 <div className="items">
                     {items.map(item => (
                         <div key={item.id} className="item-card">
+                            {role === 'teacher' && (
+                                <div 
+                                    className="edit-icon"
+                                    onClick={() => handleEditItem(item)}
+                                >
+                                    ✏️
+                                </div>
+                            )}
                             <img src={item.image || '/images/PerksClass.png'} alt={item.name} className="item-image" />
                             <h3>{item.name}</h3>
                             <p>{item.description}</p>
                             <p className="price">Price: ฿{item.price}</p>
-                            <button onClick={() => handlePurchase(item.id, item.price)}>
-                                Buy Now
-                            </button>
+                            {role === 'student' && (
+                                <button onClick={() => handlePurchase(item.id, item.price)}>
+                                    Buy Now
+                                </button>
+                            )}
                         </div>
                     ))}
                 </div>
@@ -266,16 +231,30 @@ const ItemList = () => {
                     </div>
                 )}
 
-                {showApprovalModal && selectedPurchaseRequest && (
+                {showEditModal && (
                     <div className="modal show">
                         <div className="modal-content">
-                            <h3>Approve or Decline Purchase</h3>
-                            <p>Student: {selectedPurchaseRequest.student.username}</p>
-                            <p>Item: {selectedPurchaseRequest.item.name}</p>
-                            <p>Amount: ฿{selectedPurchaseRequest.amount}</p>
-                            <button onClick={() => handleApprovePurchase(selectedPurchaseRequest.id, 'approve')}>Approve</button>
-                            <button onClick={() => handleApprovePurchase(selectedPurchaseRequest.id, 'decline')}>Decline</button>
-                            <button onClick={() => setShowApprovalModal(false)}>Cancel</button>
+                            <h3>Edit Item</h3>
+                            <label>Name:</label>
+                            <input 
+                                type="text" 
+                                value={editItem.name} 
+                                onChange={(e) => setEditItem({ ...editItem, name: e.target.value })}
+                            />
+                            <label>Description:</label>
+                            <input 
+                                type="text" 
+                                value={editItem.description} 
+                                onChange={(e) => setEditItem({ ...editItem, description: e.target.value })}
+                            />
+                            <label>Price:</label>
+                            <input 
+                                type="number" 
+                                value={editItem.price} 
+                                onChange={(e) => setEditItem({ ...editItem, price: e.target.value })}
+                            />
+                            <button onClick={handleSaveEditItem}>Save</button>
+                            <button onClick={() => setShowEditModal(false)}>Cancel</button>
                         </div>
                     </div>
                 )}

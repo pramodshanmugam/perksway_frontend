@@ -25,6 +25,9 @@ const Dashboard = () => {
   const [showWalletModal, setShowWalletModal] = useState(false);
   const [selectedStudentEmail, setSelectedStudentEmail] = useState('');
   const [walletAmount, setWalletAmount] = useState('');
+  const [showOrdersModal, setShowOrdersModal] = useState(false); // New state for orders modal
+  const [purchaseRequests, setPurchaseRequests] = useState([]); // New state for purchase requests
+
 
   const studentsPerPage = 10;
   const navigate = useNavigate();
@@ -174,6 +177,23 @@ const Dashboard = () => {
       alert('Please select a class first.');
     }
   };
+  const handleViewOrders = () => {
+    const token = localStorage.getItem('access_token');
+    const classId = selectedClass.id;
+
+    axios
+      .get(`http://167.88.45.167:8000/api/v1/classes/${classId}/purchase/`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
+        setPurchaseRequests(response.data);
+        setShowOrdersModal(true);
+      })
+      .catch((error) => {
+        console.error('Error fetching purchase requests:', error);
+        alert('Failed to fetch purchase requests.');
+      });
+  };
 
   return (
     <div className="dashboard-page">
@@ -199,8 +219,14 @@ const Dashboard = () => {
                       </span>
                       <span className="students-count"><strong>Students:</strong> {selectedClass.students.length}</span>
                     </div>
+                    {role === 'teacher' && (
+                <button className="view-orders-button" onClick={handleViewOrders}>
+                  View Orders
+                </button>
+              )}
                   </div>
                   <button className="leave-button" onClick={handleLeaveClass}>Leave</button>
+                  
                 </div>
               </div>
             ) : (
@@ -264,6 +290,44 @@ const Dashboard = () => {
                 )}
               </>
             )}
+            {showOrdersModal && (
+          <div className="orders-modal">
+            <div className="modal-content">
+              <h3>Purchase Requests</h3>
+              {purchaseRequests.length > 0 ? (
+                <table className="orders-table">
+                  <thead>
+                    <tr>
+                      <th>Student Username</th>
+                      <th>Item Name</th>
+                      <th>Amount</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {purchaseRequests.map((request) => (
+                      <tr key={request.id}>
+                        <td>{request.student.username}</td>
+                        <td>{request.item.name}</td>
+                        <td>฿{request.amount}</td>
+                        <td>{request.status}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              ) : (
+                <p>No purchase requests found.</p>
+              )}
+              <button
+                className="close-orders-modal"
+                onClick={() => setShowOrdersModal(false)}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        )}
+            
 
             <div className="tabs">
               <button onClick={() => setActiveTab('Students')} className={`tab-button ${activeTab === 'Students' ? 'active' : ''}`}>Students</button>
@@ -313,6 +377,7 @@ const Dashboard = () => {
                   </div>
                 </div>
               )}
+              
 
               <div className="pagination">
                 <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>Previous</button>

@@ -29,11 +29,17 @@ const Login = () => {
       });
 
       const data = await response.json();
+      console.log(data);
 
       if (response.ok) {
+        console.log("loggedinn");
+        
+        navigate('/dashboard/'); // Navigate to dashboard after successful login
+
         localStorage.setItem('access_token', data.access);
         localStorage.setItem('refresh_token', data.refresh);
-        navigate('/dashboard'); // Navigate to dashboard after successful login
+        console.log("loggedin");
+        
       } else {
         setError(data.detail || 'Login failed. Please try again.');
       }
