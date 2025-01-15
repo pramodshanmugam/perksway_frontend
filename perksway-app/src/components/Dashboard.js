@@ -77,7 +77,13 @@ const Dashboard = () => {
   const handleLeaveClass = () => {
     const token = localStorage.getItem('access_token');
     const class_id = localStorage.getItem('class_id');
-    axios.post(`http://167.88.45.167:8000/api/v1/classes/${class_id}/leave/`, {}, {
+  
+    if (!class_id) {
+      alert('Class ID is not available.');
+      return;
+    }
+  
+    axios.delete(`http://167.88.45.167:8000/api/v1/classes/${class_id}/leave/`, {
       headers: { Authorization: `Bearer ${token}` },
     })
     .then(() => {
@@ -90,6 +96,7 @@ const Dashboard = () => {
       setError('Failed to leave class.');
     });
   };
+  
 
   const handleJoinClass = () => {
     const token = localStorage.getItem('access_token');
