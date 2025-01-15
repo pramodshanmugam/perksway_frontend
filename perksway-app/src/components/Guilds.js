@@ -180,6 +180,24 @@ const Guilds = () => {
         setError('Failed to update group.');
       });
   };
+  const handleDeleteGroup = (groupId) => {
+    const token = localStorage.getItem('access_token');
+    if (window.confirm('Are you sure you want to delete this group?')) {
+      axios
+        .delete(`http://167.88.45.167:8000/api/v1/classes/group/${groupId}/`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then(() => {
+          alert('Group deleted successfully');
+          fetchGroups(token, classId); // Refresh the groups list
+        })
+        .catch((error) => {
+          console.error('Error deleting group:', error);
+          alert('Failed to delete the group.');
+        });
+    }
+  };
+  
 
   return (
     <div className="guilds-page">
@@ -229,7 +247,17 @@ const Guilds = () => {
                     >
                       ✏️
                     </div>
+                    <div
+    className="delete-icon"
+    onClick={(e) => {
+      e.stopPropagation();
+      handleDeleteGroup(group.id);
+    }}
+  >
+    🗑️
+  </div>
                   </>
+                  
                 )}
               </div>
             ))}

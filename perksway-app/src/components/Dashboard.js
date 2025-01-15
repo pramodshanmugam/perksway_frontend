@@ -76,7 +76,8 @@ const Dashboard = () => {
   
   const handleLeaveClass = () => {
     const token = localStorage.getItem('access_token');
-    axios.post(`http://167.88.45.167:8000/api/v1/classes/leave/${selectedClass.class_code}/`, {}, {
+    const class_id = localStorage.getItem('class_id');
+    axios.post(`http://167.88.45.167:8000/api/v1/classes/${class_id}/leave/`, {}, {
       headers: { Authorization: `Bearer ${token}` },
     })
     .then(() => {

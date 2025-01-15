@@ -8,6 +8,7 @@ import NotFound from './components/NotFound';
 import Guilds from './components/Guilds';
 import GroupDetails from './components/GroupDetails'; // Import the GroupDetails component
 import ItemList from './components/ItemList'; // Import the ItemList component for Bit Bazaar
+import BitFortune from './components/BitFortune';
 
 function App() {
   const token = localStorage.getItem('access_token'); // Check if user is logged in
@@ -33,6 +34,7 @@ function App() {
         
         <Route path="/guilds/:classId" element={<PrivateRoute><Guilds /></PrivateRoute>} />
         <Route path="/groups/:groupId" element={<PrivateRoute><GroupDetails /></PrivateRoute>} />
+        <Route path="/bit-fortune" element={<PrivateRoute><BitFortune /></PrivateRoute>} />
 
         {/* Fallback for non-existent routes */}
         <Route path="*" element={<NotFound />} />

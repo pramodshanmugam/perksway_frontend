@@ -270,3 +270,18 @@ button:hover {
 .modal-content button:hover {
     opacity: 0.9;
 }
+.item-actions {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .delete-icon {
+    cursor: pointer;
+    color: red;
+    font-size: 1.2rem;
+  }
+  
+  .delete-icon:hover {
+    color: darkred;
+  }
+  

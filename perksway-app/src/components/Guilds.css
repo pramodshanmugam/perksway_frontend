@@ -341,3 +341,13 @@
   background-color: #007bff;
   color: white;
 }
+
+.delete-icon {
+  cursor: pointer;
+  color: red;
+  font-size: 1.2rem;
+}
+
+.delete-icon:hover {
+  color: darkred;
+}

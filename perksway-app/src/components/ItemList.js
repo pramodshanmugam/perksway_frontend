@@ -203,6 +203,31 @@ const ItemList = () => {
             setError('Failed to load purchase requests.');
         })
     }
+    const handleDeleteItem = (itemId) => {
+        const token = localStorage.getItem('access_token');
+        const classId = localStorage.getItem('class_id');
+      
+        if (!classId) {
+          alert('Class ID is not available.');
+          return;
+        }
+      
+        if (window.confirm('Are you sure you want to delete this item?')) {
+          axios
+            .delete(`http://167.88.45.167:8000/api/v1/classes/${classId}/items/${itemId}/`, {
+              headers: { Authorization: `Bearer ${token}` },
+            })
+            .then(() => {
+              alert('Item deleted successfully');
+              setItems(items.filter(item => item.id !== itemId)); // Remove the deleted item from the state
+            })
+            .catch(error => {
+              alert('Failed to delete item');
+              console.error('Error deleting item:', error);
+            });
+        }
+      };
+      
 
 
 
@@ -258,15 +283,23 @@ const ItemList = () => {
                 <div className="items">
                     {items.map(item => (
                         <div key={item.id} className="item-card">
-                            {role === 'teacher' && (
-                                <div 
-                                    className="edit-icon"
-                                    onClick={() => handleEditItem(item)}
-                                >
-                                    ✏️
-                                </div>
-                            )}
-                            <img src={item.image || '/images/PerksClass.png'} alt={item.name} className="item-image" />
+                        {role === 'teacher' && (
+                          <div className="item-actions">
+                            <div
+                              className="edit-icon"
+                              onClick={() => handleEditItem(item)}
+                            >
+                              ✏️
+                            </div>
+                            <div
+                              className="delete-icon"
+                              onClick={() => handleDeleteItem(item.id)}
+                            >
+                              🗑️
+                            </div>
+                          </div>
+                        )}
+                            <img src={item.image || '/images/bazar.png'} alt={item.name} className="item-image" />
                             <h3>{item.name}</h3>
                             <p>{item.description}</p>
                             <p className="price">Price: ฿{item.price}</p>
