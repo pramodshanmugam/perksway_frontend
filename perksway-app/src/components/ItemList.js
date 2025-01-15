@@ -164,6 +164,47 @@ const ItemList = () => {
             console.error(error);
         });
     };
+    const handleRequestSelect = (requestId) => {
+        const isSelected = selectedRequests.includes(requestId);
+        if (isSelected) {
+            setSelectedRequests(selectedRequests.filter(id => id !== requestId));
+        } else {
+            setSelectedRequests([...selectedRequests, requestId]);
+        }
+    };
+    const toggleSelectAll = () => {
+        setSelectAll(!selectAll);
+        if (!selectAll) {
+            setSelectedRequests(pendingRequests.map(req => req.id)); // Select all requests
+        } else {
+            setSelectedRequests([]); // Deselect all requests
+        }
+    };
+
+    const handleApproveAll = () => {
+        selectedRequests.forEach(requestId => {
+            handleApprovePurchase(requestId, 'approve');
+        });
+    };
+    
+    const togglePendingRequests = () =>{
+        const token = localStorage.getItem('access_token');
+        const classId = localStorage.getItem('class_id');
+
+        axios.get(`http://167.88.45.167:8000/api/v1/classes/${classId}/purchase-approval/`,{
+            headers: { Authorization: `Bearer ${token}` }
+        })
+        .then(response => {
+            setPendingRequests(response.data);
+            setShowPendingRequests(!showPendingRequests);
+        })
+        .catch(error => {
+            console.error('Error fetching purchase requests:', error);
+            setError('Failed to load purchase requests.');
+        })
+    }
+
+
 
     return (
         <div className="item-list">
@@ -177,6 +218,41 @@ const ItemList = () => {
                     <button className="create-item-button" onClick={() => setShowModal(true)}>
                         Create Item
                     </button>
+                )}
+                 {role === 'teacher' && (
+                    <button className="show-pending-button" onClick={togglePendingRequests}>
+                        Show Pending Purchase Requests
+                    </button>
+                )}
+                {/* Modal for Pending Purchase Requests */}
+                {role === 'teacher' && showPendingRequests && pendingRequests.length > 0 && (
+                    <div className="modal show">
+                        <div className="modal-content">
+                            <h3>Pending Purchase Requests</h3>
+                            <button className="select-all-button" onClick={toggleSelectAll}>
+                                {selectAll ? 'Deselect All' : 'Select All'}
+                            </button>
+                            {pendingRequests.map(request => (
+                                <div key={request.id} className="request-card">
+                                    <input 
+                                        type="checkbox" 
+                                        checked={selectedRequests.includes(request.id)} 
+                                        onChange={() => handleRequestSelect(request.id)} 
+                                    />
+                                    <p>Student: {request.student.username}</p>
+                                    <p>Item: {request.item.name}</p>
+                                    <p>Amount: ฿{request.amount}</p>
+                                    <button onClick={() => { setSelectedPurchaseRequest(request); setShowApprovalModal(true); }}>
+                                        Approve/Decline
+                                    </button>
+                                </div>
+                            ))}
+                            <button className="approve-all-btn" onClick={handleApproveAll}>
+                                Approve All
+                            </button>
+                            <button onClick={() => setShowPendingRequests(false)}>Close</button>
+                        </div>
+                    </div>
                 )}
 
                 <div className="items">

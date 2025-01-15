@@ -307,8 +307,8 @@ const Dashboard = () => {
                   <tbody>
                     {purchaseRequests.map((request) => (
                       <tr key={request.id}>
-                        <td>{request.student.username}</td>
-                        <td>{request.item.name}</td>
+                        <td>{request.student}</td>
+                        <td>{request.item}</td>
                         <td>฿{request.amount}</td>
                         <td>{request.status}</td>
                       </tr>
